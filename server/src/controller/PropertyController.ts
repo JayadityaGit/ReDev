@@ -28,6 +28,7 @@ interface CreatePropertyRequest {
     address: string;
     city: string;
     state: string;
+    zip: number;
     emi: string;
     priceSqft: number;
     bed: number;
@@ -36,6 +37,7 @@ interface CreatePropertyRequest {
     phone: number;
     email: string;
     seller: string;
+    virtualTours?: string;
 }
 
 
@@ -44,7 +46,7 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
 
     try {
 
-        const {images2D, panaromaImages, is3D, Type, buyType, coordinates, price, address, city, state, emi, priceSqft, bed, bath, sqft, phone, email, seller} = req.body;
+        const {images2D, panaromaImages, is3D, Type, buyType, coordinates, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
 
 
         if(!images2D ||images2D.length === 0){
@@ -83,6 +85,10 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
 
         if( !state ||  state.length === 0){
             throw createHttpError(400, "Please provide valid state")
+        }
+
+        if(!zip || zip <= 0){
+            throw createHttpError(400, "Please provide valid zip")
         }
 
 
@@ -134,6 +140,7 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
             address: address,
             city: city,
             state: state,
+            zip: zip,
             emi: emi,
             priceSqft: priceSqft,
             bed: bed,
@@ -141,7 +148,8 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
             sqft: sqft,
             phone: phone,
             email: email,
-            seller: seller
+            seller: seller,
+            virtualTours: virtualTours
         })
 
 
@@ -166,7 +174,7 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
         }
 
 
-        const {images2D, panaromaImages, is3D, Type, buyType, coordinates, price, address, city, state, emi, priceSqft, bed, bath, sqft, phone, email, seller} = req.body;
+        const {images2D, panaromaImages, is3D, Type, buyType, coordinates, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
 
         
 
@@ -206,6 +214,10 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
 
         if( !state ||  state.length === 0){
             throw createHttpError(400, "Please provide valid state")
+        }
+
+        if(!zip || zip <= 0){
+            throw createHttpError(400, "Please provide valid zip")
         }
 
 
@@ -258,6 +270,7 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
             address: address,
             city: city,
             state: state,
+            zip: zip,
             emi: emi,
             priceSqft: priceSqft,
             bed: bed,
@@ -265,7 +278,8 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
             sqft: sqft,
             phone: phone,
             email: email,
-            seller: seller
+            seller: seller,
+            virtualTours: virtualTours,
         }, {new: true})
 
 

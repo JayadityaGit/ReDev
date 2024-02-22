@@ -7,11 +7,12 @@ const propertySchema = new Schema({
     is3D: {type: Boolean, required: true},
     Type: {type: String, required: true},
     buyType: {type: String, required: true},
-    coordinates: {type: [Number], required: true, unique: true},
+    coordinates: {type: [Number], required: true},
     price: {type: Number, required: true},
-    address: {type: String, required: true, unique: true},
+    address: {type: String, required: true},
     city: {type: String, required: true},
     state: {type: String, required: true},
+    zip: {type: Number, required: true},
     emi: {type: String, required: true},
     priceSqft: {type: Number, required: true},
     bed: {type: Number, required: true},
@@ -20,6 +21,7 @@ const propertySchema = new Schema({
     phone: {type: Number, required: true},
     email: {type: String, required: true},
     seller: {type: String, required: true},
+    virtualTours:{type: String}
 
 }, {timestamps: true})
 
