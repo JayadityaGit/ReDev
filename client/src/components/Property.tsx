@@ -1,5 +1,6 @@
 import { Button, Card, ListGroup } from "react-bootstrap"
 import { PropertyModel } from "../models/Property"
+import { useNavigate } from "react-router-dom"
 
 
 interface PropertyProps{
@@ -7,11 +8,19 @@ interface PropertyProps{
 }
 
 const Property = ({details}:PropertyProps) => {
+     
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+
+        navigate("/details", {state: details});
+        
+    }
 
     
   return (
     
-        <Card  style={{ width: '18rem' }}>
+        <Card onClick={() => handleClick()}  style={{ width: '18rem' }}>
             <Card.Img variant="top" src={details.images2D[0]} />
                 <Card.Body>
                     <Card.Title>{details.price}</Card.Title>
@@ -20,7 +29,7 @@ const Property = ({details}:PropertyProps) => {
                         <ListGroup.Item>{details.address}</ListGroup.Item>
                     </ListGroup>
         
-                    <Button variant="outline-secondary">Email Agent</Button>
+                    <Button variant="outline-secondary" >Explore</Button>
                 </Card.Body>
         </Card>
       
