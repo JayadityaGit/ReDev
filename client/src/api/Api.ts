@@ -1,8 +1,9 @@
 import { PropertyModel } from "../models/Property";
+import { User } from "../models/user";
 
 async function getDataOrError(input: RequestInfo, init?: RequestInit) {
 
-    const response = await fetch(input, init);
+    const response = await fetch(input, {...init, credentials: "include"});
 
     if(response.ok){
         return response;
@@ -16,9 +17,9 @@ async function getDataOrError(input: RequestInfo, init?: RequestInit) {
 
 
 
-export async function getAllProperties() {
+export async function getOwnedProperties() {
 
-    const response = await getDataOrError("/getAllProperties", {method: "GET"});
+    const response = await getDataOrError("http://localhost:5000/getOwnedProperties", {method: "GET"});
 
     const data = await response.json();
 
@@ -27,22 +28,79 @@ export async function getAllProperties() {
 }
 
 
+export async function getLoggedInUser(): Promise<User> {
+    const response = await getDataOrError("http://localhost:5000/users/getUser", {method: "GET"});
+
+    return response.json();
+}
+
+
+export interface SignUpCredintials {
+    username: string;
+    email: string;
+    password: string
+}
+
+
+export async function signUp(credentials: SignUpCredintials) {
+
+    const response = await getDataOrError("http://localhost:5000/users/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(credentials)
+    });
+
+
+    return response.json()
+    
+}
+
+
+export interface LoginCredintials {
+    username: string;
+    password: string
+}
+
+
+export async function login(credentials: LoginCredintials) {
+    const response = await getDataOrError("http://localhost:5000/users/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify(credentials)
+
+    })
+
+    return response.json()
+}
+
+export async function logout() {
+
+    await getDataOrError("http://localhost:5000/users/logout", {method: "POST"});
+    
+}
+
+
 export interface PropertyInput {
+    images2D: string[];
     panaromaImages?: string[];
-    is3D: boolean;
     Type: string;
     buyType: string;
-    coordinates: number[];
-    price: number;
+    price: string;
     address: string;
     city: string;
     state: string;
+    zip: string;
     emi: string;
-    priceSqft: number;
-    bed: number;
-    bath: number;
-    sqft: number;
-    phone: number;
+    priceSqft: string;
+    bed: string;
+    bath: string;
+    sqft: string;
+    phone: string;
     email: string;
     seller: string;
     virtualTours?: string;
@@ -50,7 +108,11 @@ export interface PropertyInput {
 
 export async function createProperty(property: PropertyInput): Promise<PropertyModel> {
 
-    const response = await getDataOrError("/createProperty", {
+
+    
+
+
+    const response = await getDataOrError("http://localhost:5000/createProperty", {
         
         method: "POST",
         headers: {

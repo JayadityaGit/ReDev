@@ -3,11 +3,14 @@ import PropertyModel from "../model/PropertyModel";
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
 
-export const getallProperties: RequestHandler = async(req, res, next) => {
+export const getOwnedProperties: RequestHandler = async(req, res, next) => {
 
     try {
     //throw createHttpError(500, "Internal Server Error");
-    const properties = await PropertyModel.find().exec();
+
+    const authenticatedUserId = req.session.userId;
+
+    const properties = await PropertyModel.find({userId: authenticatedUserId}).exec();
     res.status(200).json(properties)
 
     } catch (error) {
@@ -20,21 +23,19 @@ export const getallProperties: RequestHandler = async(req, res, next) => {
 interface CreatePropertyRequest {
     images2D: string[];
     panaromaImages?: string[];
-    is3D: boolean;
     Type: string;
     buyType: string;
-    coordinates: number[];
-    price: number;
+    price: string;
     address: string;
     city: string;
     state: string;
-    zip: number;
+    zip: string;
     emi: string;
-    priceSqft: number;
-    bed: number;
-    bath: number;
-    sqft: number;
-    phone: number;
+    priceSqft: string;
+    bed: string;
+    bath: string;
+    sqft: string;
+    phone: string;
     email: string;
     seller: string;
     virtualTours?: string;
@@ -46,7 +47,7 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
 
     try {
 
-        const {images2D, panaromaImages, is3D, Type, buyType, coordinates, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
+        const {images2D, panaromaImages, Type, buyType, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
 
 
         if(!images2D ||images2D.length === 0){
@@ -63,12 +64,7 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
         }
 
 
-        if(!coordinates || coordinates.length !== 2){
-            throw createHttpError(400, "Please provide valid coordinates")
-        }
-
-
-        if(!price||price <= 0){
+        if(!price||price.length === 0){
             throw createHttpError(400, "Please provide valid price")
         }
 
@@ -87,7 +83,7 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
             throw createHttpError(400, "Please provide valid state")
         }
 
-        if(!zip || zip <= 0){
+        if(!zip || zip.length===0){
             throw createHttpError(400, "Please provide valid zip")
         }
 
@@ -97,26 +93,26 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
         }
         
 
-        if(!priceSqft || priceSqft <= 0){
+        if(!priceSqft || priceSqft.length <= 0){
             throw createHttpError(400, "Please provide valid price per sqft")
         }
 
 
-        if(!bed || bed < 0){
+        if(!bed || bed.length <= 0){
             throw createHttpError(400, "Please provide details for the number of bedrooms")
         }
 
 
-        if(!bath || bath < 0){
+        if(!bath || bath.length <= 0){
             throw createHttpError(400, "Please provide details for the number of bathrooms")
         }
 
-        if(!sqft || sqft < 0){
+        if(!sqft || sqft.length <= 0){
             throw createHttpError(400, "Please provide details for the area in sqft")
         }
 
 
-        if(!phone || phone <= 0){
+        if(!phone || phone.length <= 0){
             throw createHttpError(400, "Please provide valid phone number")
         }
 
@@ -130,12 +126,12 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
         }
 
         const newProperty = await PropertyModel.create({
+            userId: req.session.userId,
             images2D: images2D ,
             panaromaImages:panaromaImages ,
-            is3D:is3D ,
+            is3D:panaromaImages || virtualTours ? true : false,
             Type: Type,
             buyType: buyType,
-            coordinates: coordinates,
             price: price,
             address: address,
             city: city,
@@ -174,7 +170,7 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
         }
 
 
-        const {images2D, panaromaImages, is3D, Type, buyType, coordinates, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
+        const {images2D, panaromaImages,  Type, buyType, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
 
         
 
@@ -192,12 +188,9 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
         }
 
 
-        if(!coordinates || coordinates.length !== 2){
-            throw createHttpError(400, "Please provide valid coordinates")
-        }
+       
 
-
-        if(!price||price <= 0){
+        if(!price||price.length <= 0){
             throw createHttpError(400, "Please provide valid price")
         }
 
@@ -216,7 +209,7 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
             throw createHttpError(400, "Please provide valid state")
         }
 
-        if(!zip || zip <= 0){
+        if(!zip || zip.length <= 0){
             throw createHttpError(400, "Please provide valid zip")
         }
 
@@ -226,26 +219,26 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
         }
         
 
-        if(!priceSqft || priceSqft <= 0){
+        if(!priceSqft || priceSqft.length <= 0){
             throw createHttpError(400, "Please provide valid price per sqft")
         }
 
 
-        if(!bed || bed < 0){
+        if(!bed || bed.length <= 0){
             throw createHttpError(400, "Please provide details for the number of bedrooms")
         }
 
 
-        if(!bath || bath < 0){
+        if(!bath || bath.length <= 0){
             throw createHttpError(400, "Please provide details for the number of bathrooms")
         }
 
-        if(!sqft || sqft < 0){
+        if(!sqft || sqft.length <= 0){
             throw createHttpError(400, "Please provide details for the area in sqft")
         }
 
 
-        if(!phone || phone <= 0){
+        if(!phone || phone.length <= 0){
             throw createHttpError(400, "Please provide valid phone number")
         }
 
@@ -260,12 +253,12 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
 
 
         const updatedProperty = await PropertyModel.findByIdAndUpdate(id, {
+            userId: req.session.userId,
             images2D: images2D ,
             panaromaImages:panaromaImages ,
-            is3D:is3D ,
+            is3D: panaromaImages || virtualTours ? true : false,
             Type: Type,
             buyType: buyType,
-            coordinates: coordinates,
             price: price,
             address: address,
             city: city,

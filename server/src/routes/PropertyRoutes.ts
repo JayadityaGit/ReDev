@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { createProperty, deleteProperty, getallProperties, updateProperty } from "../controller/PropertyController";
+import { createProperty, deleteProperty, getOwnedProperties, updateProperty } from "../controller/PropertyController";
+
 
 
 
@@ -7,7 +8,7 @@ const router = Router();
 
 
 
-router.get("/getAllProperties", getallProperties);
+router.get("/getOwnedProperties", getOwnedProperties);
 router.post("/createProperty", createProperty);
 router.patch("/updateProperty/:id", updateProperty)
 router.delete("/deleteProperty/:id", deleteProperty)

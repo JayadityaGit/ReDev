@@ -1,5 +1,6 @@
 export interface PropertyModel {
     _id: string;
+    userId: string,
     images2D: string[];
     panaromaImages: string[];
     is3D: boolean;
