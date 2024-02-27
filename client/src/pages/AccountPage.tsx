@@ -48,11 +48,11 @@ const AccountPage = () => {
         <TabsList>
           <TabsTrigger value="account">Account</TabsTrigger>
           <TabsTrigger value="your properties">Your Properties</TabsTrigger>
-          <TabsTrigger value="Favourites">Favaourites</TabsTrigger>
+          <TabsTrigger value="Favourites">Library</TabsTrigger>
         </TabsList>
 
       <TabsContent value="account">{user?.username}</TabsContent>
-      <TabsContent value="your properties"><YourProperties user={user}/></TabsContent>
+      <TabsContent value="your properties"><YourProperties/></TabsContent>
       <TabsContent value="Favourites"><YourFavourites/></TabsContent>
 
     </Tabs>

@@ -2,9 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 
 import LandingPage from "./Pages/LandingPage"
 import ListingsPage from "./Pages/ListingsPage"
-import PropertyDetails from "./Pages/PropertyDetails"
 import AccountPage from "./Pages/AccountPage"
 import UploadProperty from "./Pages/UploadProperty"
+import EditProperty from "./Pages/EditProperty"
 
 
 const App = () => {
@@ -14,9 +14,9 @@ const App = () => {
          <Routes>
              <Route path="/" element={<LandingPage/>}/>
              <Route path="/listing" element={<ListingsPage/>}/>
-             <Route path="/property" element={<PropertyDetails/>}/>
              <Route path="/account" element={<AccountPage/>}/>
              <Route path="/upload" element={<UploadProperty/>}/>
+             <Route path="/edit" element={<EditProperty/>}/>
          </Routes>
     
     </BrowserRouter>

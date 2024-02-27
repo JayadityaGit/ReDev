@@ -9,7 +9,10 @@ async function getDataOrError(input: RequestInfo, init?: RequestInit) {
         return response;
     }else{
         const errorBody = await response.json();
-        throw new Error(errorBody.error);
+
+        const message: string = errorBody.error;
+
+        throw message;
     }
 
 }

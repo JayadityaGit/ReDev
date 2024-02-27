@@ -19,7 +19,8 @@ import { User } from "@/models/user"
 
 interface LoginModalProps {
 
-  onSuccess: (user: User) => void
+  onSuccess: (user: User) => void,
+  showToast: (error: string) => void
   
 }
 
@@ -37,7 +38,7 @@ interface LoginModalProps {
   })
 
  
-const SignUpDialog = ({onSuccess}: LoginModalProps) => {
+const SignUpDialog = ({onSuccess, showToast}: LoginModalProps) => {
 
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
@@ -61,7 +62,9 @@ const SignUpDialog = ({onSuccess}: LoginModalProps) => {
       onSuccess(response);
 
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      const errorMessage = typeof error === 'string' ? error : 'An error occurred.';
+      showToast(errorMessage);
     }
 
   }

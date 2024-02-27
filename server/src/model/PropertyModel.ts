@@ -13,7 +13,7 @@ const propertySchema = new Schema({
     address: {type: String, required: true},
     city: {type: String, required: true},
     state: {type: String, required: true},
-    zip: {type: Number, required: true},
+    zip: {type: String, required: true},
     emi: {type: String, required: true},
     priceSqft: {type: String, required: true},
     bed: {type: String, required: true},

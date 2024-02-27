@@ -6,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 import {z} from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { useToast } from "@/components/ui/use-toast"
+
+
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+
+
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -27,7 +30,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { getImageLinks } from "@/util/cloudinary";
-import { Toaster } from "@/components/ui/toaster";
 
 
 const uploadFormSchema = z.object({
@@ -54,7 +56,7 @@ const uploadFormSchema = z.object({
 })
 
 
-const UploadProperty = () => {
+const EditProperty = () => {
 
   useEffect(() => {
 
@@ -88,7 +90,6 @@ const UploadProperty = () => {
 
   const navigate = useNavigate();
 
-  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof uploadFormSchema>>({
     resolver: zodResolver(uploadFormSchema),
@@ -122,12 +123,9 @@ const UploadProperty = () => {
 
    
  
-      await createProperty(values);
+      const response = await createProperty(values);
 
-      toast({
-        title: "Success",
-        description: "Property uploaded successfully",
-      })
+      console.log(response);
       
 
     } catch (error) {
@@ -157,7 +155,6 @@ const UploadProperty = () => {
 
 
   return (
-    <>
     <Form {...form}>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -502,18 +499,11 @@ const UploadProperty = () => {
           <Button type="submit">Submit</Button>
       </form>
 
-     
-
       </Form>
-      
-
-      <Toaster/>
-
-      </>
   )
 }
 
 
 
 
-export default UploadProperty
+export default EditProperty

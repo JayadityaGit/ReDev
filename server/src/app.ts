@@ -1,5 +1,5 @@
 import express, { NextFunction,  Response, Request } from "express";
-import router from "./routes/PropertyRoutes";
+import authpropertyRouter from "./routes/AuthPropertyRoutes";
 import createHttpError, {isHttpError} from "http-errors";
 import morgan from "morgan";
 import userRouter from "./routes/UserRoutes";
@@ -9,6 +9,7 @@ import env from "./util/validateEnv"
 import MongoStore from "connect-mongo";
 import { requriesAuth } from "./middleware/auth";
 import cors from "cors"
+import propertyRouter from "./routes/PropertyRoutes";
 
 const app = express();
 
@@ -40,7 +41,8 @@ app.use(session({
 
 
 app.use("/users", userRouter)
-app.use("/", requriesAuth, router)
+app.use("/properties", propertyRouter)
+app.use("/", requriesAuth, authpropertyRouter)
 
 
 app.use((req, res, next)=>{
