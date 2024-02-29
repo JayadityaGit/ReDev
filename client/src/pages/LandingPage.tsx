@@ -8,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 
 
@@ -48,7 +49,7 @@ const LandingPage = () => {
         const data = await response.json();
 
   
-        setUserCity(data.address.town)
+        setUserCity(data.address.city)
 
       })
     }
@@ -62,7 +63,11 @@ const LandingPage = () => {
       loggedInUser ? (
         <div>
           
-          Welcome {loggedInUser.username}  
+          <Avatar className="cursor-pointer" onClick={() => navigate("/account")}>
+              <AvatarImage src={loggedInUser.profilePic} />
+              <AvatarFallback>{loggedInUser.username[0]}</AvatarFallback>
+            </Avatar>
+
 
           <Button onClick={async() => {
 

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { useNavigate } from "react-router-dom"
+
 
 import {
   Card,
@@ -73,13 +73,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import EditProperty from "./EditProperty"
+import UploadProperty from "./UploadProperty"
 
 
 
 
 const YourProperties = () => {
 
-  const navigate = useNavigate()
+
 
   const [properties, setProperties] = useState<PropertyModel[]>([])
 
@@ -107,9 +108,23 @@ const YourProperties = () => {
 
   return (
     <div>
-       <Button onClick={()=>{navigate("/upload")}} > Upload Property</Button>
+       
 
+                   <Dialog>
+                      <DialogTrigger><Button> Upload Property</Button></DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Upload Property</DialogTitle>
 
+                          
+                           
+                            <UploadProperty/>
+
+                          
+                          
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
          {
           properties.map((property) => {
             return (

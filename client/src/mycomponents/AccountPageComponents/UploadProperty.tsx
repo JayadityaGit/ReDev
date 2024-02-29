@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select"
 import { getImageLinks } from "@/util/cloudinary";
 import { Toaster } from "@/components/ui/toaster";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 
 const uploadFormSchema = z.object({
@@ -158,9 +159,25 @@ const UploadProperty = () => {
 
   return (
     <>
+    
     <Form {...form}>
+     
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
+        
+      <Tabs>
+        <TabsList defaultValue="showcase" className="w-[400px]">
+
+          <TabsTrigger value="showcase">Showcase</TabsTrigger>
+
+          <TabsTrigger value="details">Details</TabsTrigger>
+
+          <TabsTrigger value="seller">Seller</TabsTrigger>
+
+        </TabsList>
+
+        <TabsContent value="showcase">
 
         <FormField
         control={form.control}
@@ -170,7 +187,7 @@ const UploadProperty = () => {
             <FormLabel>2D Images of the property</FormLabel>
 
             <FormControl>
-              <Input type="file" id="images2D" multiple onChange={handleImagesChange}/>
+              <Input type="file" id="images2D"  multiple onChange={handleImagesChange}/>
             </FormControl>
             <FormMessage/>
           </FormItem>
@@ -196,6 +213,32 @@ const UploadProperty = () => {
         )}
 
         />
+
+       <FormField
+          
+          control={form.control}
+          name="virtualTours"
+          defaultValue={user?.email}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>virtualTour Link</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        
+
+       </TabsContent>
+
+
+
+
+
+       <TabsContent value="details">
 
       <FormField
         control={form.control}
@@ -432,6 +475,10 @@ const UploadProperty = () => {
           )}
         />
 
+</TabsContent>
+
+
+<TabsContent value="seller">
 
 <FormField
           
@@ -458,7 +505,7 @@ const UploadProperty = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder={user?.email} {...field} />
+                <Input placeholder={user?.email}  {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -475,34 +522,26 @@ const UploadProperty = () => {
             <FormItem>
               <FormLabel>Seller</FormLabel>
               <FormControl>
-                <Input placeholder={user?.username} {...field} />
+                <Input placeholder={user?.username}  {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+<Button type="submit">Submit</Button>
 
-<FormField
+</TabsContent>
+       
           
-          control={form.control}
-          name="virtualTours"
-          defaultValue={user?.email}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>virtualTour Link</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
           
-          <Button type="submit">Submit</Button>
+
+          
+
+       </Tabs>
       </form>
 
-     
+    
 
       </Form>
       

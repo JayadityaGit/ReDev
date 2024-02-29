@@ -18,6 +18,22 @@ async function getDataOrError(input: RequestInfo, init?: RequestInit) {
 }
 
 
+export async function changeProfilePicture(url: string) {
+
+    const response = await getDataOrError("http://localhost:5000/users/updateProfile", {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({profilePic: url})
+    })
+
+    const data = await response.json();
+
+    return data;
+    
+}
+
 export async function getLibrary() {
 
     const response = await getDataOrError("http://localhost:5000/getLibrary", {method: "GET"});

@@ -13,6 +13,7 @@ interface SignUpBody{
 export const signUp: RequestHandler<unknown, unknown, SignUpBody, unknown> = async(req, res, next) => {
 
     try {
+
         const username = req.body.username;
         const email = req.body.email;
         const passwordRaw = req.body.password;
@@ -94,6 +95,43 @@ export const login: RequestHandler<unknown, unknown, LoginBody, unknown> = async
         next(error)
        }
 
+}
+
+
+export const putPropfilePic: RequestHandler = async(req, res, next) => {
+    try {
+
+        const profilePic = req.body.profilePic;
+
+        if(!profilePic){
+            throw createHttpError(400, "Parameters missing")
+        }
+
+        const authenticatedUserId = req.session.userId;
+
+        if(!authenticatedUserId){
+            throw createHttpError(401, "User not authenticated")
+        }
+
+        const user = await UserModel.findById(authenticatedUserId).select("+email").exec();
+
+        if(!user){
+            throw createHttpError(404, "User not found")
+        }
+
+
+        
+
+        const updatedUser = await UserModel.findByIdAndUpdate(authenticatedUserId, {profilePic: profilePic}, {new: true}).select("+email").exec();
+
+       
+        res.status(200).json(updatedUser)
+
+
+        
+    } catch (error) {
+        next(error)
+    }
 }
 
 

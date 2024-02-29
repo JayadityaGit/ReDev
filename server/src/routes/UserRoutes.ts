@@ -1,5 +1,5 @@
 import express from "express"
-import { login, signUp, getAuthenticatedUser, logout } from "../controller/UserController"
+import { login, signUp, getAuthenticatedUser, logout, putPropfilePic } from "../controller/UserController"
 
 
 const userRouter = express.Router();
@@ -12,6 +12,8 @@ userRouter.post("/signUp", signUp);
 userRouter.post("/login", login);
 
 userRouter.post("/logout", logout)
+
+userRouter.patch("/updateProfile", putPropfilePic)
 
 
 
