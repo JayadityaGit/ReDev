@@ -53,7 +53,7 @@ const AccountPage = () => {
 
       <TabsContent value="account">{user?.username}</TabsContent>
       <TabsContent value="your properties"><YourProperties/></TabsContent>
-      <TabsContent value="Favourites"><YourFavourites/></TabsContent>
+      <TabsContent value="Favourites"><YourFavourites user ={user}/></TabsContent>
 
     </Tabs>
 

@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import PropertyModel from "../model/PropertyModel";
 import createHttpError from "http-errors";
 import mongoose from "mongoose";
+import UserModel from "../model/UserModel";
 
 export const getOwnedProperties: RequestHandler = async(req, res, next) => {
 
@@ -17,6 +18,104 @@ export const getOwnedProperties: RequestHandler = async(req, res, next) => {
         next(error)
     }
 
+}
+
+export const getLibrary: RequestHandler = async(req, res, next) => {
+
+    try {
+        const authenticatedUserId = req.session.userId;
+
+        const user = await UserModel.findById(authenticatedUserId).exec();
+    
+        if (!user) {
+            throw createHttpError(404, "User not found");
+        }
+    
+        const userWithLibrary = await UserModel.findById(authenticatedUserId).populate('library').exec();
+        
+        res.status(200).json(userWithLibrary);
+    } catch (error) {
+        next(error)
+    }
+
+
+
+}
+
+
+export const addToLibrary: RequestHandler = async(req, res, next) => {
+    try {
+        
+        const property = req.body.property;
+
+        if(!property){
+            throw createHttpError(400, "Please provide property");
+        }
+
+        const authenticatedUserId = req.session.userId;
+
+        const user = await UserModel.findById(authenticatedUserId).exec();
+
+        if (!user) {
+            throw createHttpError(404, "User not authenticated");
+        }
+
+        // Push the entire property object into the library array
+        user.library.push(property);
+
+        // Save the user to persist the changes
+        await user.save();
+
+        res.status(200).json(user);
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export const removeFromLibrary: RequestHandler = async(req, res, next) => {
+    try {
+        const propertyId = req.body.id;
+
+        // Validate property ID format
+        if (!mongoose.isValidObjectId(propertyId)) {
+            throw createHttpError(400, "Please provide a valid property ID");
+        }
+
+        // Get authenticated user using session
+        const authenticatedUserId = req.session.userId;
+        if (!authenticatedUserId) {
+            throw createHttpError(401, "User not authenticated");
+        }
+
+        // Find user document
+        const user = await UserModel.findById(authenticatedUserId).exec();
+        if (!user) {
+            throw createHttpError(404, "User not found");
+        }
+
+        // Find the index of the property to remove
+        const propertyIndex = user.library.findIndex(
+            (property) => property._id.toString() === propertyId
+        );
+
+        // Check if property exists in the library
+        if (propertyIndex === -1) {
+            throw createHttpError(404, "Property not found in user's library");
+        }
+         
+        const removedProperty = user.library[propertyIndex];
+        // Remove the property from the library array
+        user.library.splice(propertyIndex, 1);
+
+        // Save the updated user document
+        await user.save();
+
+        res.status(200).json(removedProperty);
+    } catch (error) {
+        next(error);
+    }
 }
 
 

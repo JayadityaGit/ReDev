@@ -1,5 +1,5 @@
 
-import {  createProperty, getLoggedInUser } from "@/api/Api";
+import {   getLoggedInUser, updateProperty } from "@/api/Api";
 import { User } from "@/models/user";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -30,9 +30,13 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { getImageLinks } from "@/util/cloudinary";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PropertyModel } from "@/models/Property";
 
 
 const uploadFormSchema = z.object({
+
+
 
   images2D: z.string().array().min(1, { message: "Please upload at least one image" }),
   panaromaImages: z.string().array().optional(),
@@ -56,7 +60,11 @@ const uploadFormSchema = z.object({
 })
 
 
-const EditProperty = () => {
+interface EditPropertyModel {
+  property: PropertyModel
+}
+
+const EditProperty = ({property}: EditPropertyModel) => {
 
   useEffect(() => {
 
@@ -94,24 +102,25 @@ const EditProperty = () => {
   const form = useForm<z.infer<typeof uploadFormSchema>>({
     resolver: zodResolver(uploadFormSchema),
     defaultValues: {
-       images2D: [],
-       panaromaImages: [],
-       Type: "",
-       buyType: "",
-       price: "",
-       address: "",
-       city: "",
-       state: "",
-       zip: "",
-       emi: "",
-       priceSqft: "",
-       bed: "",
-       bath: "",
-       sqft: "",
-       phone: "",
-       email: user?.email || "",
-       seller: user?.username || "",
-       virtualTours: "",
+      
+       images2D: property.images2D,
+       panaromaImages: property.panaromaImages,
+       Type: property.Type,
+       buyType: property.buyType,
+       price: property.price.toString(),
+       address: property.address,
+       city: property.city,
+       state: property.state,
+       zip: property.zip.toString(),
+       emi: property.emi,
+       priceSqft: property.priceSqft.toString(),
+       bed: property.bed.toString(),
+       bath: property.bath.toString(),
+       sqft: property.sqft.toString(),
+       phone: property.phone.toString(),
+       email: property.email,
+       seller: property.seller,
+       virtualTours: property.virtualTours,
     },
   })
 
@@ -123,7 +132,7 @@ const EditProperty = () => {
 
    
  
-      const response = await createProperty(values);
+      const response = await updateProperty(values, property._id);
 
       console.log(response);
       
@@ -155,9 +164,25 @@ const EditProperty = () => {
 
 
   return (
+    
     <Form {...form}>
+     
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+
+        
+      <Tabs>
+        <TabsList defaultValue="showcase" className="w-[400px]">
+
+          <TabsTrigger value="showcase">Showcase</TabsTrigger>
+
+          <TabsTrigger value="details">Details</TabsTrigger>
+
+          <TabsTrigger value="seller">Seller</TabsTrigger>
+
+        </TabsList>
+
+        <TabsContent value="showcase">
 
         <FormField
         control={form.control}
@@ -167,7 +192,7 @@ const EditProperty = () => {
             <FormLabel>2D Images of the property</FormLabel>
 
             <FormControl>
-              <Input type="file" id="images2D" multiple onChange={handleImagesChange}/>
+              <Input type="file" id="images2D"  multiple onChange={handleImagesChange}/>
             </FormControl>
             <FormMessage/>
           </FormItem>
@@ -193,6 +218,32 @@ const EditProperty = () => {
         )}
 
         />
+
+       <FormField
+          
+          control={form.control}
+          name="virtualTours"
+          defaultValue={user?.email}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>virtualTour Link</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        
+
+       </TabsContent>
+
+
+
+
+
+       <TabsContent value="details">
 
       <FormField
         control={form.control}
@@ -429,6 +480,10 @@ const EditProperty = () => {
           )}
         />
 
+</TabsContent>
+
+
+<TabsContent value="seller">
 
 <FormField
           
@@ -455,7 +510,7 @@ const EditProperty = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder={user?.email} {...field} />
+                <Input placeholder={user?.email}  {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -472,34 +527,29 @@ const EditProperty = () => {
             <FormItem>
               <FormLabel>Seller</FormLabel>
               <FormControl>
-                <Input placeholder={user?.username} {...field} />
+                <Input placeholder={user?.username}  {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
+<Button type="submit">Submit</Button>
 
-<FormField
+</TabsContent>
+       
           
-          control={form.control}
-          name="virtualTours"
-          defaultValue={user?.email}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>virtualTour Link</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
           
-          <Button type="submit">Submit</Button>
+
+          
+
+       </Tabs>
       </form>
 
+    
+
       </Form>
+      
   )
 }
 

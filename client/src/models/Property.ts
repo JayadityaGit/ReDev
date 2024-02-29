@@ -6,7 +6,6 @@ export interface PropertyModel {
     is3D: boolean;
     Type: string;
     buyType: string;
-    coordinates: number[];
     price: number;
     address: string;
     city: string;

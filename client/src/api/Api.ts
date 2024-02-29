@@ -18,11 +18,61 @@ async function getDataOrError(input: RequestInfo, init?: RequestInit) {
 }
 
 
+export async function getLibrary() {
+
+    const response = await getDataOrError("http://localhost:5000/getLibrary", {method: "GET"});
+
+    const data = await response.json();
+
+    return data;
+    
+}
+
+
+export async function addToLibrary(property: PropertyModel) {
+    const response = await getDataOrError("http://localhost:5000/addToLibrary", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({property: property})
+    })
+
+    const data = await response.json();
+
+    return data;
+}
+
+export async function removeFromLibrary(propertyId: string) {
+    const response = await getDataOrError("http://localhost:5000/removeFromLibrary", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({id: propertyId})
+    })
+
+    const data = await response.json();
+
+    return data;
+}
+
 
 
 export async function getOwnedProperties() {
 
     const response = await getDataOrError("http://localhost:5000/getOwnedProperties", {method: "GET"});
+
+    const data = await response.json();
+
+    return data;
+    
+}
+
+
+export async function deleteOwnedProperty(id: string): Promise<PropertyModel> {
+
+    const response = await getDataOrError("http://localhost:5000/deleteProperty/" + id, {method: "DELETE"});
 
     const data = await response.json();
 
@@ -128,5 +178,45 @@ export async function createProperty(property: PropertyInput): Promise<PropertyM
     
     const data = await response.json();
 
+    return data;
+}
+
+
+
+export async function updateProperty(property: unknown, id: string): Promise<PropertyModel> {
+
+    const response = await getDataOrError("http://localhost:5000/updateProperty/"+id, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(property)
+    
+    });
+
+    const data = await response.json();
+
+    return data;
+    
+}
+
+
+
+export async function getPropertiesByCity(city: string): Promise<PropertyModel[]> {
+    
+    const response = await getDataOrError("http://localhost:5000/properties/city", {
+        
+    method: "POST",
+
+    headers:{
+        "Content-Type": "application/json",
+    },
+
+    
+    body: JSON.stringify({city: city})
+
+
+});
+    const data = await response.json();
     return data;
 }

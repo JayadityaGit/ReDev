@@ -16,7 +16,7 @@ export const getPropertyByCity: RequestHandler = async (req, res, next) => {
         const response = await PropertyModel.find({city: city}).exec();
 
         if(response.length === 0){
-            throw createHttpError(404, "No properties found");
+            throw createHttpError(404, "No properties found in this area");
         }
 
         res.status(200).json(response);

@@ -1,60 +1,39 @@
-import { addToLibrary, getLibrary, removeFromLibrary } from "@/api/Api"
-import { PropertyModel } from "@/models/Property"
-
-import { useEffect, useState } from "react"
-
-import { User } from "@/models/user"
-import FavCard from "./FavCard"
+import { addToLibrary, removeFromLibrary } from "@/api/Api"
+import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
-
-
-
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
-import { Button } from "@/components/ui/button"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Switch } from "@/components/ui/switch"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { PropertyModel } from "@/models/Property"
+import { User } from "@/models/user"
+import { AspectRatio } from "@radix-ui/react-aspect-ratio"
+import { useEffect, useState } from "react"
 
 
-interface YourFavouritesProps {
-  user: User | undefined
+
+interface MyCardProps {
+    property: PropertyModel;
+    user: User | undefined,
 }
 
-const YourFavourites = ({user}: YourFavouritesProps) => {
 
-  const [library, setLibrary] = useState<PropertyModel[]>([])
+const ListingCard = ({ property, user }: MyCardProps) => {
 
-  const [toggleState, setToggleState] = useState(true);
+ const [toggleState, setToggleState] = useState(false);
 
-  
   useEffect(() => {
-    async function loadLibrary() {
-      try {
 
-        const response = await getLibrary();
 
-        setLibrary(response.library);
-        
-      } catch (error) {
-        console.log(error)
-      }
+    if(user?.library.includes(property._id)){
+      setToggleState(true)
     }
-
-    loadLibrary();
-
-  }, [])
+   
+  }, [user?.library, property._id])
   
-
-
  
-
   return (
-    <div>{
-      
-      library.map((property) => (
-        <Card key={property._id}>
+       <Card>
               <Carousel>
                 <CarouselContent>
 
@@ -80,7 +59,7 @@ const YourFavourites = ({user}: YourFavouritesProps) => {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <Switch  checked={toggleState} onCheckedChange={async(event)=>{
+                        <Switch disabled={!user} checked={toggleState} onCheckedChange={async(event)=>{
 
                               
                               if(event){
@@ -91,15 +70,10 @@ const YourFavourites = ({user}: YourFavouritesProps) => {
                                
                                
                               }else{
-                               const removedProperty = await removeFromLibrary(property._id)
+                                await removeFromLibrary(property._id)
 
-                               console.log(removedProperty);
+                                setToggleState(false);
 
-                               setLibrary(library.filter((property) => property._id !== removedProperty))
-
-                               
-
-                              
                            
                               }
                             
@@ -115,7 +89,7 @@ const YourFavourites = ({user}: YourFavouritesProps) => {
 
 
                 <CardDescription >{property.buyType}</CardDescription>
-                <CardDescription className="flex space-x-4 text-lg "><span className="font-extrabold">{property.bed}</span> bed <span className="font-extrabold">{property.bath}</span> bath <span className="font-extrabold">{property.sqft}</span> sqft</CardDescription>
+                <CardDescription className="flex space-x-4 text-lg "><span className="font-extrabold">{property.bed}</span> bed <span className="font-extrabold">{property.bath}</span> bath <span className="font-extrabold">{property.sqft}</span></CardDescription>
                 <CardDescription >{property.address}</CardDescription>
             </CardHeader>
 
@@ -142,10 +116,7 @@ const YourFavourites = ({user}: YourFavouritesProps) => {
 
           </Card>
 
-      ))
-      
-      }</div>
   )
 }
 
-export default YourFavourites
+export default ListingCard
