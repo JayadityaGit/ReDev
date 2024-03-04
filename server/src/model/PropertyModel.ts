@@ -22,7 +22,8 @@ const propertySchema = new Schema({
     phone: {type: String, required: true},
     email: {type: String, required: true},
     seller: {type: String, required: true},
-    virtualTours:{type: String, unique: true}
+    virtualTours:{type: String},
+    videoTours:{type: String},
 
 }, {timestamps: true})
 

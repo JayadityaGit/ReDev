@@ -138,6 +138,7 @@ interface CreatePropertyRequest {
     email: string;
     seller: string;
     virtualTours?: string;
+    videoTours?: string;
 }
 
 
@@ -146,7 +147,7 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
 
     try {
 
-        const {images2D, panaromaImages, Type, buyType, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
+        const {images2D, panaromaImages, Type, buyType, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours, videoTours} = req.body;
 
 
         if(!images2D ||images2D.length === 0){
@@ -224,6 +225,8 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
             throw createHttpError(400, "Please provide the name of the seller")
         }
 
+      
+
         const newProperty = await PropertyModel.create({
             userId: req.session.userId,
             images2D: images2D ,
@@ -244,7 +247,8 @@ export const createProperty: RequestHandler<unknown, unknown, CreatePropertyRequ
             phone: phone,
             email: email,
             seller: seller,
-            virtualTours: virtualTours
+            virtualTours: virtualTours,
+            videoTours: videoTours
         })
 
 
@@ -269,7 +273,7 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
         }
 
 
-        const {images2D, panaromaImages,  Type, buyType, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours} = req.body;
+        const {images2D, panaromaImages,  Type, buyType, price, address, city, state, zip, emi, priceSqft, bed, bath, sqft, phone, email, seller, virtualTours, videoTours} = req.body;
 
         
 
@@ -372,6 +376,7 @@ export const updateProperty: RequestHandler = async(req, res, next) => {
             email: email,
             seller: seller,
             virtualTours: virtualTours,
+            videoTours: videoTours
         }, {new: true})
 
 

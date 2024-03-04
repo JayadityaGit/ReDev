@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { Input } from "@/components/ui/input"
 import { useNavigate } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
 
 
 
@@ -128,6 +129,8 @@ const LandingPage = () => {
        }
         }} variant={"outline"}>Search</Button>
        </div>
+
+      
        <Toaster/>
     </div>
   )

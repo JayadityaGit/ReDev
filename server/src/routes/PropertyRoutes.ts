@@ -1,11 +1,13 @@
 import { Router } from "express";
-import { getPropertyByCity } from "../controller/PropertyController";
+import { getPropertyByCity, getPropertyByFilters } from "../controller/PropertyController";
 
 
  const propertyRouter = Router();
 
 
 propertyRouter.post("/city", getPropertyByCity);
+
+propertyRouter.post("/filters", getPropertyByFilters)
 
 
 

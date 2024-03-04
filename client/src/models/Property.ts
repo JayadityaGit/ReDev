@@ -11,15 +11,16 @@ export interface PropertyModel {
     city: string;
     state: string;
     zip: number;
-    emi: string;
+    emi: number;
     priceSqft: number;
     bed: number;
     bath: number;
     sqft: number;
-    phone: number;
+    phone: string;
     email: string;
     seller: string;
     virtualTours: string;
+    videoTours: string;
     createdAt: string;
     updatedAt: string;
     __v: number;

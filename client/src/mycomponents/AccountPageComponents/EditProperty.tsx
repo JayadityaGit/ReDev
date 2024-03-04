@@ -56,6 +56,7 @@ const uploadFormSchema = z.object({
   email: z.string().min(4, { message: "Please enter email" }),
   seller: z.string().min(1, { message: "Please enter seller" }),
   virtualTours: z.string().optional(),
+  videoTours: z.string().optional(),
 
 })
 
@@ -112,7 +113,7 @@ const EditProperty = ({property}: EditPropertyModel) => {
        city: property.city,
        state: property.state,
        zip: property.zip.toString(),
-       emi: property.emi,
+       emi: property.emi.toString(),
        priceSqft: property.priceSqft.toString(),
        bed: property.bed.toString(),
        bath: property.bath.toString(),
@@ -223,10 +224,27 @@ const EditProperty = ({property}: EditPropertyModel) => {
           
           control={form.control}
           name="virtualTours"
-          defaultValue={user?.email}
+          defaultValue={""}
           render={({ field }) => (
             <FormItem>
               <FormLabel>virtualTour Link</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+
+        <FormField
+          
+          control={form.control}
+          name="videoTours"
+          defaultValue={""}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>videoTourLink</FormLabel>
               <FormControl>
                 <Input placeholder="" {...field} />
               </FormControl>

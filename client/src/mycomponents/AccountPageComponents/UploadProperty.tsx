@@ -51,6 +51,7 @@ const uploadFormSchema = z.object({
   email: z.string().min(4, { message: "Please enter email" }),
   seller: z.string().min(1, { message: "Please enter seller" }),
   virtualTours: z.string().optional(),
+  videoTours: z.string().optional(),
 
 })
 
@@ -112,6 +113,7 @@ const UploadProperty = () => {
        email: user?.email || "",
        seller: user?.username || "",
        virtualTours: "",
+       videoTours: "",
     },
   })
 
@@ -230,6 +232,23 @@ const UploadProperty = () => {
           )}
         />
 
+
+       <FormField
+          
+          control={form.control}
+          name="videoTours"
+          defaultValue={user?.email}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>videoTour Link</FormLabel>
+              <FormControl>
+                <Input placeholder="" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         
 
        </TabsContent>
@@ -326,7 +345,7 @@ const UploadProperty = () => {
             <FormItem>
               <FormLabel>Price</FormLabel>
               <FormControl>
-                <Input placeholder="1.5cr" {...field} />
+                <Input placeholder="1900000" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -404,7 +423,7 @@ const UploadProperty = () => {
             <FormItem>
               <FormLabel>Emi</FormLabel>
               <FormControl>
-                <Input placeholder="2334/month" {...field} />
+                <Input placeholder="2334" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -420,7 +439,7 @@ const UploadProperty = () => {
             <FormItem>
               <FormLabel>Price per sqft</FormLabel>
               <FormControl>
-                <Input placeholder="2334/sqft" {...field} />
+                <Input placeholder="2334" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

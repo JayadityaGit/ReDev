@@ -173,12 +173,14 @@ export interface PropertyInput {
     email: string;
     seller: string;
     virtualTours?: string;
+    videoTours?: string
 }
 
 export async function createProperty(property: PropertyInput): Promise<PropertyModel> {
 
 
     
+   
 
 
     const response = await getDataOrError("http://localhost:5000/createProperty", {
